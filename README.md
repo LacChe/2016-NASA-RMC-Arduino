@@ -1,5 +1,7 @@
 This is an art project I made as part of Art of Connection.
 
+<img src="https://github.com/LacChe/TSoliumite/blob/main/tsol.gif" width="960" />
+
 Commands:
 leave
 look, l
