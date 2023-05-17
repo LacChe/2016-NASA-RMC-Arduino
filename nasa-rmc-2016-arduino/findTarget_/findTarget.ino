@@ -28,8 +28,6 @@ int scan = 0;
 int scanCount = 3; // # how many scans to do before turning servo by 1;
 int range = 45; // # servo moves between 0 and range degrees
 
-boolean track = false;
-
 void setup() {
     Serial.begin(9600);
     Serial.print("Starting...\n");
@@ -82,10 +80,8 @@ void loop() {
             // String yStr = "    y:  " + String(y) + "\n";
             // String wStr = "    w:  " + String(w) + "\n";
             // String hStr = "    h:  " + String(h) + "\n";
-
-            track = false;
+            
             if(color == "Red"){ // change to target color
-              
                 if (x >= 160 - fuzziness && x <=  160 + fuzziness) {
                     
                      // get average

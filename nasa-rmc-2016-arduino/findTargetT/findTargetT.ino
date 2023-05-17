@@ -5,17 +5,17 @@
 #include <Pixy.h>
 #include <math.h>
 #include <Wire.h>
-#define SLAVE_ADDRESS 0x05
+#define SLAVE_ADDRESS 0x04
 
-int X = 0;
 int Y = 0;
-int Xp = 0;
+int X = 0;
 int Yp = 0;
+int Xp = 0;
 double radianAlpha = 0;
 boolean foundLeft = false, foundRight = false;
 
 // stuff for sending to pi
-int number, age, stat = 0;
+int number, age, stat;
 byte x1, x2, y1, y2;
 
 Servo myservo;
@@ -67,9 +67,8 @@ void loop() {
         *  green at sig 3
         *  red at sig 5
         */ 
-        if(pixy.blocks[j].signature == 5){ // change to target color
+        if(pixy.blocks[j].signature == 3){ // change to target color
             if (x >= 160 - fuzziness && x <=  160 + fuzziness) {
-                Serial.println("red center"); 
                 unsigned long a = pulseIn(3, HIGH);
                 unsigned long b = pulseIn(3, HIGH);
                 unsigned long c = pulseIn(3, HIGH);
@@ -77,16 +76,12 @@ void loop() {
                 unsigned long e = pulseIn(3, HIGH);
                 left = (a + b + c + d + e) / 5;
                 left = left / 10;
-                // leftTurn = false;
-                if (foundRight == true && foundLeft == true){
-                   //foundRight == false;
-                }
+                leftTurn = false;
                 foundLeft = true;
             }
         }
-        if(pixy.blocks[j].signature == 3){ // change to target sig
+        if(pixy.blocks[j].signature == 5){ // change to target sig
             if (x >= 160 - fuzziness && x <=  160 + fuzziness) {
-                Serial.println("green center"); 
                 unsigned long a = pulseIn(3, HIGH);
                 unsigned long b = pulseIn(3, HIGH);
                 unsigned long c = pulseIn(3, HIGH);
@@ -94,10 +89,7 @@ void loop() {
                 unsigned long e = pulseIn(3, HIGH);
                 right = (a + b + c + d + e) / 5;
                 right = right / 10;
-                // leftTurn = true;
-                if (foundRight == true && foundLeft == true){
-                   //foundLeft == false;
-                }
+                leftTurn = true;
                 foundRight = true;
             }
         }
@@ -119,13 +111,13 @@ void loop() {
         //Serial.print(left);
         //Serial.print(" right: ");
         //Serial.print(right);
-        if(foundLeft && foundRight && false){
+        if(foundLeft && foundRight){
             getY((double)(left),(double)(right));
             getX((double)(left));
-            Serial.print("| X: "); 
-            Serial.print(X); 
-            Serial.print(" Y: "); 
-            Serial.println(Y);
+            //Serial.print("| X: "); 
+            //Serial.print(X); 
+            //Serial.print(" Y: "); 
+            //Serial.println(Y);
             foundLeft = foundRight = false;
         }
     }
@@ -141,11 +133,11 @@ void updateStatus(){
     if(!foundLeft && !foundRight) stat = 3;
     else if(!foundLeft) stat = 1;
     else if(!foundRight) stat = 2;
-    //Serial.print(foundLeft); 
-    //Serial.print(" "); 
-    //Serial.print(foundRight); 
-    //Serial.print(" "); 
-    //Serial.println(stat); 
+    Serial.print(foundLeft); 
+    Serial.print(" "); 
+    Serial.print(foundRight); 
+    Serial.print(" "); 
+    Serial.println(stat); 
 }
 
 void getY(double l, double r){
@@ -201,19 +193,9 @@ void sendData(){
         Serial.println(a);
     }
     if(number == 5){
-        //update stat ?
-        updateStatus();
-        Wire.write(stat);
+        // update stat
+        // Wire.write(a);
         Serial.print(" Sent stat: ");
-        Serial.println(stat);
-    }
-    if (number == 6){
-        if(left - right > 30) {
-           Wire.write(1);
-        } else if(right - left > 30) {
-           Wire.write(2);  
-        } else {
-           Wire.write(0);
-        }
+        //Serial.println(a);
     }
 }

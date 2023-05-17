@@ -25,7 +25,7 @@ unsigned long dist2[30]; // target 2
 unsigned long margin = 100; // accepted mm difference between 
 
 int scan = 0;
-int scanCount = 3; // # how many scans to do before turning servo by 1;
+int scanCount = 1; // # how many scans to do before turning servo by 1;
 int range = 45; // # servo moves between 0 and range degrees
 
 void setup() {
@@ -56,19 +56,19 @@ void loop() {
                     color = "Blue";
                     break;
                 case 3:
-                    color = "  3 col XXX";
-                    break;
-                case 4:
-                    color = "  4 col XXX";
-                    break;
-                case 5:
                     color = "Green";
                     break;
+                case 4:
+                    color = "Green";
+                    break;
+                case 5:
+                    color = "Red";
+                    break;
                 case 6:
-                    color = "  6 col XXX";
+                    color = "Red";
                     break;
                 case 7:
-                    color = "  7 col XXX";
+                    color = "Red";
                     break;
             }
             int x = pixy.blocks[j].x;
@@ -81,7 +81,7 @@ void loop() {
             // String wStr = "    w:  " + String(w) + "\n";
             // String hStr = "    h:  " + String(h) + "\n";
             
-            if(color == "Red"){ // change to target color
+            if(color == "Red" || color == "Green"){ // change to target color
                 if (x >= 160 - fuzziness && x <=  160 + fuzziness) {
                     
                      // get average
@@ -106,14 +106,14 @@ void loop() {
                      */
                       
                      // # debug stuff:
-                      pulse_width = pulse_width / 10; // 10usec = 1 cm of distance for LIDAR-Lite
+                     // pulse_width = pulse_width / 10; // 10usec = 1 cm of distance for LIDAR-Lite
                       Serial.print(color);
                       Serial.print(" at: ");
                       Serial.print(pulse_width); // # print distance
                       Serial.print("mm");
                       if (left) Serial.println(" left");
                       if (!left) Serial.println(" right");
-                      delay(200); // # stopping here to show that center distance was detected
+                      // delay(200); // # stopping here to show that center distance was detected
                 }
             }
        }
